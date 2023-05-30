@@ -17,14 +17,14 @@ const Rename = () => {
   console.log(isOpened);
 
   useEffect(() => {
-    input.current.focus();
+    input.current.select();
   }, []);
 
   const validationSchema = yup.object().shape({
     body: yup
       .string()
       .trim()
-      .required()
+      .required('обязательное поле')
       .min(3, 'от 3х до 20 символов')
       .max(20, 'от 3х до 20 символов')
       .notOneOf(allChannelNames, 'имя должно быть уникальным'),
