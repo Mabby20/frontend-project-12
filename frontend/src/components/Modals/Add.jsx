@@ -24,7 +24,7 @@ const Add = () => {
     body: yup
       .string()
       .trim()
-      .required()
+      .required('обязательное поле')
       .min(3, 'от 3х до 20 символов')
       .max(20, 'от 3х до 20 символов')
       .notOneOf(allChannelNames, 'имя должно быть уникальным'),
@@ -37,10 +37,10 @@ const Add = () => {
     validationSchema,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: ({ body }) => {
+    onSubmit: async ({ body }) => {
       console.log(body);
       try {
-        socket.addNewChannel({ name: body });
+        await socket.addNewChannel({ name: body });
         dispatch(modalsActions.close());
 
         // сделать вывод всплывающих окон - тоастифай.
