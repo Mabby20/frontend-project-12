@@ -12,6 +12,5 @@ const getAuthHeader = () => {
 export default async () => {
   const authHeader = { headers: getAuthHeader() };
   const { data } = await axios.get(ApiRoutes.dataPath(), authHeader);
-  // console.log('data in fetchData', data);
   return data;
 };
