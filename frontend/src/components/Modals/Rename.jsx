@@ -14,7 +14,10 @@ const Rename = () => {
   const allChannelNames = useSelector(channelsSelectors.selectAllChannelNames);
   console.log('allChannelNames', allChannelNames);
   const { isOpened, targetId } = useSelector((state) => state.modals);
-  console.log(isOpened);
+  const channelById = useSelector((state) =>
+    channelsSelectors.selectChannelById(state, targetId),
+  );
+  const channelNameById = channelById.name;
 
   useEffect(() => {
     input.current.select();
