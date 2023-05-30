@@ -12,8 +12,7 @@ import {
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as yup from 'yup';
-
-import loginImg from '../../assets/login.jpeg';
+import loginNewImg from '../../assets/loginNew.png';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 
@@ -21,7 +20,7 @@ const LoginCard = () => {
   const inputName = useRef(null);
   const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
-  const auth = useAuth();
+  const { logIn } = useAuth();
 
   useEffect(() => {
     inputName.current.focus();
@@ -34,8 +33,8 @@ const LoginCard = () => {
   }, [authFailed]);
 
   const validationSchema = yup.object().shape({
-    username: yup.string().trim().required(),
-    password: yup.string().required(),
+    username: yup.string().trim().required('обязательное поле'),
+    password: yup.string().required('обязательное поле'),
   });
 
   const formik = useFormik({
@@ -44,12 +43,13 @@ const LoginCard = () => {
       password: '',
     },
     validationSchema,
+    validateOnChange: false,
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
         const { data } = await axios.post(ApiRoutes.loginPath(), values);
-        auth.logIn(data);
-        navigate({ pathname: '/' });
+        logIn(data);
+        navigate(appPaths.chatPagePath);
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -60,13 +60,9 @@ const LoginCard = () => {
       }
     },
   });
-  // console.log('errors -', formik.errors);
-  // console.log('username errors -', formik.errors.username);
-  // console.log('touched -', formik.touched);
-  // console.log('username touched -', formik.touched.username);
 
-  const isInvalidUsername = formik.errors.username && formik.touched.username;
-  const isInvalidPassword = formik.errors.password && formik.touched.password;
+  const isInvalidUsername = formik.touched.username && formik.errors.username;
+  const isInvalidPassword = formik.touched.password && formik.errors.password;
 
   return (
     <Container className="h-100" fluid>
@@ -79,7 +75,13 @@ const LoginCard = () => {
                 md={6}
                 className="d-flex align-items-center justify-content-center"
               >
-                <Image className="rounded-circle" alt="Войти" src={loginImg} />
+                <Image
+                  className="rounded-circle"
+                  with={200}
+                  height={200}
+                  alt="Войти"
+                  src={loginNewImg}
+                />
               </Col>
               <Form
                 onSubmit={formik.handleSubmit}
@@ -109,7 +111,7 @@ const LoginCard = () => {
                       name="password"
                       type="password"
                       autoComplete="password"
-                      placeholder="Ваш ник"
+                      placeholder="Ваш Пароль"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
@@ -118,7 +120,8 @@ const LoginCard = () => {
                     />
                     <Form.Label htmlFor="password">Ваш Пароль</Form.Label>
                     <Form.Control.Feedback type="invalid">
-                      the username or password is incorrect
+                      {formik.errors.password ||
+                        'the username or password is incorrect'}
                     </Form.Control.Feedback>
                   </Form.Floating>
                   <Button
