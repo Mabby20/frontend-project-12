@@ -36,21 +36,17 @@ const channelsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchDataThunk.fulfilled, (state, action) => {
-        // console.log('state before in extrRed', current(state));
-        // console.log('action in extrareducer', action);
         channelsAdapter.setAll(state, action.payload.channels);
         state.currentChannelId = action.payload.currentChannelId;
         state.error = null;
         state.statusLoading = statusList.loaded;
-        // console.log('state after in extrRed', current(state));
       })
       .addCase(fetchDataThunk.pending, (state) => {
         state.error = null;
         state.statusLoading = statusList.loading;
       })
       .addCase(fetchDataThunk.rejected, (state, action) => {
-        const error = action.payload;
-        state.error = error;
+        state.error = action.payload;
         state.statusLoading = statusList.errorLoad;
       });
   },
@@ -62,6 +58,7 @@ const selectors = channelsAdapter.getSelectors((state) => state.channelsInfo);
 
 const customSelectors = {
   selectAll: selectors.selectAll,
+  selectChannelById: selectors.selectById,
   selectAllChannelNames: (state) => {
     const channels = selectors.selectAll(state);
     return channels.map(({ name }) => name);
