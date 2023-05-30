@@ -32,7 +32,7 @@ const Rename = () => {
 
   const formik = useFormik({
     initialValues: {
-      body: '',
+      body: channelNameById,
     },
     validationSchema,
     validateOnBlur: false,
