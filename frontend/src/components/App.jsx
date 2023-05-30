@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import LoginCard from './LoginPage/LoginCard';
+import SignupCard from './SignupPage/SignupCard';
 import NotFoundPage from './Errors/NotFoundPage';
 import NavBar from './navBar/NavBar';
 import ProtectedRoute from './ProtectedRoute';
@@ -21,6 +22,7 @@ const App = () => (
           }
         />
         <Route path="login" element={<LoginCard />} />
+        <Route path="signup" element={<SignupCard />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
