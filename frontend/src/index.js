@@ -3,9 +3,9 @@ import './styles/application.scss';
 
 import init from './init';
 
-const app = () => {
+const app = async () => {
   const root = ReactDOM.createRoot(document.getElementById('chat'));
-  root.render(init());
+  root.render(await init());
 };
 
 app();
