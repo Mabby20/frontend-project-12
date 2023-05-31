@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row, Spinner } from 'react-bootstrap';
 import { useEffect } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import fetchDataThunk from '../../slices/thunks';
 import ChannelBox from './ChannelBox';
 import ChatBox from './ChatBox';
@@ -16,14 +17,17 @@ const statusList = {
   errorLoad: 'errorLoad',
 };
 
-const LoadingSpinner = () => (
-  <div className="d-flex justify-content-center align-items-center">
-    <h2 className="me-2">Loading...</h2>
-    <Spinner variant="primary" animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
-  </div>
-);
+const LoadingSpinner = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="d-flex justify-content-center align-items-center">
+      <h2 className="me-2">{t('loading')}</h2>
+      <Spinner variant="primary" animation="border" role="status">
+        <span className="visually-hidden">{t('loading')}</span>
+      </Spinner>
+    </div>
+  );
+};
 
 const ChatError = () => {};
 
