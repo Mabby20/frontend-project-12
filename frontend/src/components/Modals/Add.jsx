@@ -3,18 +3,18 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 
 const Add = () => {
+  const { t } = useTranslation();
   const inputRef = useRef(null);
   const socket = useSocket();
   const dispatch = useDispatch();
   const allChannelNames = useSelector(channelsSelectors.selectAllChannelNames);
-  console.log('allChannelNames', allChannelNames);
   const isOpened = useSelector((state) => state.modals.isOpened);
-  console.log(isOpened);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -24,10 +24,10 @@ const Add = () => {
     body: yup
       .string()
       .trim()
-      .required('обязательное поле')
-      .min(3, 'от 3х до 20 символов')
-      .max(20, 'от 3х до 20 символов')
-      .notOneOf(allChannelNames, 'имя должно быть уникальным'),
+      .required(t('validation.required'))
+      .min(3, t('validation.lengthWarning'))
+      .max(20, t('validation.lengthWarning'))
+      .notOneOf(allChannelNames, t('validation.uniqueName')),
   });
 
   const formik = useFormik({
@@ -60,7 +60,7 @@ const Add = () => {
   return (
     <Modal show={isOpened} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modalAddChannel.addChannel')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -77,20 +77,22 @@ const Add = () => {
               disabled={formik.isSubmitting}
               name="body"
             />
-            <Form.Label visuallyHidden>Имя канала</Form.Label>
+            <Form.Label visuallyHidden>
+              {t('modalAddChannel.labelChannelName')}
+            </Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.body}
             </Form.Control.Feedback>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                Отменить
+                {t('reject')}
               </Button>
               <Button
                 type="submit"
                 variant="primary"
                 disabled={formik.isSubmitting}
               >
-                Отправить
+                {t('send')}
               </Button>
             </Modal.Footer>
           </Form.Group>
