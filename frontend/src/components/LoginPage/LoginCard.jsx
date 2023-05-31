@@ -12,11 +12,13 @@ import {
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import loginNewImg from '../../assets/loginNew.png';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 
 const LoginCard = () => {
+  const { t } = useTranslation();
   const inputName = useRef(null);
   const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
@@ -33,8 +35,8 @@ const LoginCard = () => {
   }, [authFailed]);
 
   const validationSchema = yup.object().shape({
-    username: yup.string().trim().required('обязательное поле'),
-    password: yup.string().required('обязательное поле'),
+    username: yup.string().trim().required(t('validation.required')),
+    password: yup.string().required(t('validation.required')),
   });
 
   const formik = useFormik({
@@ -54,6 +56,7 @@ const LoginCard = () => {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
+          // нужно ли выводить ошибку в тоаст тут?
           return;
         }
         throw err;
@@ -95,7 +98,7 @@ const LoginCard = () => {
                       name="username"
                       type="text"
                       autoComplete="username"
-                      placeholder="Ваш ник"
+                      placeholder={t('formForLogin.placeholderUsername')}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.username}
@@ -103,7 +106,9 @@ const LoginCard = () => {
                       ref={inputName}
                       required
                     />
-                    <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                    <Form.Label htmlFor="username">
+                      {t('formForLogin.labelUsername')}
+                    </Form.Label>
                   </Form.Floating>
                   <Form.Floating className="mb-4" controlid="floatingPassword">
                     <Form.Control
@@ -111,17 +116,19 @@ const LoginCard = () => {
                       name="password"
                       type="password"
                       autoComplete="password"
-                      placeholder="Ваш Пароль"
+                      placeholder={t('formForLogin.placeholderPassword')}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
                       isInvalid={authFailed || isInvalidPassword}
                       required
                     />
-                    <Form.Label htmlFor="password">Ваш Пароль</Form.Label>
+                    <Form.Label htmlFor="password">
+                      {t('formForLogin.labelPassword')}
+                    </Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.password ||
-                        'the username or password is incorrect'}
+                        t('formForLogin.invalidUserData')}
                     </Form.Control.Feedback>
                   </Form.Floating>
                   <Button
@@ -136,8 +143,10 @@ const LoginCard = () => {
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?</span>{' '}
-                <Link to={appPaths.signUpPagePath}>Регистрация</Link>
+                <span>{t('hasAccount')}</span>{' '}
+                <Link to={appPaths.signUpPagePath}>
+                  {t('textRegistration')}
+                </Link>
               </div>
             </Card.Footer>
           </Card>
