@@ -1,9 +1,11 @@
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 
 const Remove = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const socket = useSocket();
 
@@ -15,8 +17,8 @@ const Remove = () => {
 
   const handleDeleteClick = async () => {
     try {
-      const respose = await socket.removeChannel(targetId);
-      console.log('respose by delete channel', respose);
+      const response = await socket.removeChannel(targetId);
+      console.log('response', response);
       dispatch(modalsActions.close());
       // выводим в тоаст
     } catch (err) {
@@ -28,16 +30,16 @@ const Remove = () => {
   return (
     <Modal show={isOpened} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал?</Modal.Title>
+        <Modal.Title>{t('modalRemoveChannel.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Уверены?</p>
+        <p>{t('modalRemoveChannel.body')}</p>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Отменить
+            {t('reject')}
           </Button>
           <Button variant="danger" onClick={handleDeleteClick}>
-            Удалить
+            {t('remove')}
           </Button>
         </Modal.Footer>
       </Modal.Body>
