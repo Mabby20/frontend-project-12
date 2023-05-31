@@ -3,11 +3,13 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import * as yup from 'yup';
 import { useEffect, useRef } from 'react';
-import useAuth, { useSocket } from '../../hooks';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import useAuth, { useSocket } from '../../hooks';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 
 const FormMessage = () => {
+  const { t } = useTranslation();
   const inputMessage = useRef(null);
   const currentChannelId = useSelector(
     channelsSelectors.SelectCurrentChannelId,
@@ -22,7 +24,7 @@ const FormMessage = () => {
   });
 
   const validationSchema = yup.object().shape({
-    messageText: yup.string().trim().required(),
+    messageText: yup.string().trim().required(t('validation.required')),
   });
 
   const formik = useFormik({
@@ -56,15 +58,15 @@ const FormMessage = () => {
             className="border-0 p-0 ps-2"
             name="messageText"
             type="text"
-            placeholder="Введите ваше сообщение..."
-            aria-label="Новое сообщение"
+            placeholder={t('formForMessage.placeholder')}
+            aria-label={t('formForMessage.ariaLabel')}
             disabled={formik.isSubmitting}
             onChange={formik.handleChange}
             value={formik.values.messageText}
           />
           <Button variant="group-vertical" type="submit" disabled={isInvalid}>
             <ArrowRightSquare size={20} />
-            <span className="visually-hidden">Отправить</span>
+            <span className="visually-hidden">{t('send')}</span>
           </Button>
         </InputGroup>
       </Form>
@@ -73,3 +75,6 @@ const FormMessage = () => {
 };
 
 export default FormMessage;
+
+// todo:
+//  - валидация
