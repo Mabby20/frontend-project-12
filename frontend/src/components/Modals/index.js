@@ -17,7 +17,6 @@ const getModalComponent = (modalType) => {
   }
 
   const Component = getModal(modalType);
-  console.log('Component', Component);
 
   return <Component />;
 };
