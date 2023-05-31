@@ -1,17 +1,17 @@
 import { Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import FormMessage from './FormMessage';
 import Message from './Message';
 import { selectors as messagesSelectors } from '../../slices/messageSlice';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 
 const ChatBox = () => {
+  const { t } = useTranslation();
   const currentChannel = useSelector(channelsSelectors.selectCurrentChannel);
-  console.log('currentChannel', currentChannel);
   const messagesForCurrentChannel = useSelector(
     messagesSelectors.selectMessagesById,
   );
-  console.log('messagesForCurrentChannel', messagesForCurrentChannel);
   return (
     <Col className="p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -20,7 +20,7 @@ const ChatBox = () => {
             <b># {currentChannel.name}</b>
           </p>
           <span className="text-muted">
-            {messagesForCurrentChannel.length} Сообщений
+            {t('message', { count: messagesForCurrentChannel.length })}
           </span>
         </div>
         <div className="chat-messages overflow-auto px-5">
@@ -37,5 +37,5 @@ const ChatBox = () => {
 export default ChatBox;
 
 // todo:
-//  -не понимаю как убрать костыль с тем когда нет свойства, почему так вообще просиходит?
+//  -не понимаю как убрать костыль с тем когда нет свойства, почему так вообще просиходит? Готово
 //  -первый рендер у нас пустой стор и он не может прочитать свойства.
