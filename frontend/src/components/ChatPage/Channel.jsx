@@ -1,12 +1,11 @@
 import { Button, ButtonGroup, Dropdown, Nav } from 'react-bootstrap';
-import { useSocket } from '../../hooks';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 
-const Channel = (props) => {
-  const { isActive, channel } = props;
-  const socket = useSocket();
+const Channel = ({ isActive, channel }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isRemovable = channel.removable;
   const btnVariant = isActive ? 'secondary' : null;
@@ -54,10 +53,10 @@ const Channel = (props) => {
 
           <Dropdown.Menu>
             <Dropdown.Item onClick={handleDeleteModalClick}>
-              Удалить
+              {t('remove')}
             </Dropdown.Item>
             <Dropdown.Item onClick={handleRenameModalClick}>
-              Переимоновать
+              {t('rename')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
