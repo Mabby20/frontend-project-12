@@ -12,12 +12,14 @@ import * as yup from 'yup';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 import signupImg from '../../assets/signup.png';
 
 const SignupCard = () => {
   const inputUserName = useRef(null);
+  const { t } = useTranslation();
   const { logIn } = useAuth();
   const navigate = useNavigate();
   const [regFailed, setRegFailed] = useState(false);
@@ -30,16 +32,16 @@ const SignupCard = () => {
     username: yup
       .string()
       .trim()
-      .required('обязательное поле')
-      .min(3, 'от 3 до 20 символов')
-      .max(20, 'от 3 до 20 символов'),
+      .required(t('validation.required'))
+      .min(3, t('validation.lengthWarning'))
+      .max(20, t('validation.lengthWarning')),
     password: yup
       .string()
-      .required('обязательное поле')
-      .min(6, 'не менее 6 символов'),
+      .required(t('validation.required'))
+      .min(6, t('validation.passwordWarning')),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password'), null], 'пароли должны совпадать'),
+      .oneOf([yup.ref('password'), null], t('validation.confirmPass')),
   });
 
   const formik = useFormik({
@@ -62,6 +64,7 @@ const SignupCard = () => {
       } catch (err) {
         if (err.isAxiosError && err.response.status === 409) {
           setRegFailed(true);
+          // выводить ошибку в тоаст
           console.error(err);
           return;
         }
@@ -70,11 +73,10 @@ const SignupCard = () => {
     },
   });
 
-  console.log('formik', formik);
   const isInvalidUsername = formik.touched.username && formik.errors.username;
   const isInvalidPassword = formik.touched.password && formik.errors.password;
   const isInvalidConfirmPassword =
-    formik.errors.confirmPassword && formik.touched.confirmPassword;
+    formik.touched.confirmPassword && formik.errors.confirmPassword;
 
   return (
     <Container className="h-100" fluid>
@@ -107,7 +109,7 @@ const SignupCard = () => {
                       name="username"
                       type="text"
                       autoComplete="username"
-                      placeholder="Имя пользователя"
+                      placeholder={t('formForSignup.placeholderUsername')}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.username}
@@ -118,7 +120,9 @@ const SignupCard = () => {
                       ref={inputUserName}
                       required
                     />
-                    <Form.Label htmlFor="username">Имя пользователя</Form.Label>
+                    <Form.Label htmlFor="username">
+                      {t('formForSignup.labelUsername')}
+                    </Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.username}
                     </Form.Control.Feedback>
@@ -129,7 +133,7 @@ const SignupCard = () => {
                       name="password"
                       type="password"
                       autoComplete="password"
-                      placeholder="Пароль"
+                      placeholder={t('formForSignup.placeholderPassword')}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
@@ -139,7 +143,9 @@ const SignupCard = () => {
                       }
                       required
                     />
-                    <Form.Label htmlFor="password">Пароль</Form.Label>
+                    <Form.Label htmlFor="password">
+                      {t('formForSignup.labelPassword')}
+                    </Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.password}
                     </Form.Control.Feedback>
@@ -150,7 +156,9 @@ const SignupCard = () => {
                       name="confirmPassword"
                       type="password"
                       autoComplete="password"
-                      placeholder="Подтвердите пароль"
+                      placeholder={t(
+                        'formForSignup.placeholderConfirmPassword',
+                      )}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.confirmPassword}
@@ -162,11 +170,11 @@ const SignupCard = () => {
                       required
                     />
                     <Form.Label htmlFor="password">
-                      Подтвердите Пароль
+                      {t('formForSignup.labelConfirmPassword')}
                     </Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.confirmPassword ||
-                        'такой пользователь уже зарегестрирован'}
+                        t('formForSignup.existingUser')}
                     </Form.Control.Feedback>
                   </Form.Floating>
                   <Button
@@ -174,7 +182,7 @@ const SignupCard = () => {
                     variant="outline-primary"
                     className="w-100 mb-3"
                   >
-                    Зарегестрироваться
+                    {t('registration')}
                   </Button>
                 </fieldset>
               </Form>
