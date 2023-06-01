@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
@@ -42,17 +43,17 @@ const Rename = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async ({ body }) => {
-      console.log(body);
       try {
         await socket.renameChannel({
           id: targetId,
           name: body,
         });
         dispatch(modalsActions.close());
-        // сделать вывод всплывающих окон - тоастифай.
+        toast.success(t('toastify.successRenameChannel'));
       } catch (err) {
+        toast.error(t('toastify.reject'));
         // если ошибка тоже выводить в сплывающие
-        console.log(err);
+        console.error(err);
       }
     },
   });
