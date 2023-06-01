@@ -3,14 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { useRollbar } from '@rollbar/react';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 
 const Remove = () => {
-  const { t } = useTranslation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const socket = useSocket();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const rollbar = useRollbar();
+  const { t } = useTranslation();
 
   const { isOpened, targetId } = useSelector((state) => state.modals);
 
@@ -28,7 +30,7 @@ const Remove = () => {
     } catch (err) {
       setIsSubmitting(false);
       toast.error(t('toastify.reject'));
-      // выводим ошибку в тоаст и запихиыаем в статистику
+      rollbar.error('removeChannel', err);
       console.error(err);
     }
   };
