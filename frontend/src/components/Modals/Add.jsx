@@ -39,7 +39,6 @@ const Add = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async ({ body }) => {
-      console.log(body);
       try {
         await socket.addNewChannel({ name: body });
         dispatch(modalsActions.close());
