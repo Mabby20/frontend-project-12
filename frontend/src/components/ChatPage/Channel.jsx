@@ -1,6 +1,7 @@
 import { Button, ButtonGroup, Dropdown, Nav } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 
@@ -9,6 +10,7 @@ const Channel = ({ isActive, channel }) => {
   const dispatch = useDispatch();
   const isRemovable = channel.removable;
   const btnVariant = isActive ? 'secondary' : null;
+  const channelName = filter.clean(channel.name);
 
   const handleDeleteModalClick = () => {
     dispatch(
@@ -41,7 +43,7 @@ const Channel = ({ isActive, channel }) => {
             className="w-100 rounded-0 text-start"
             variant={btnVariant}
           >
-            <span>#</span> {channel.name}
+            <span>#</span> {channelName}
           </Button>
 
           <Dropdown.Toggle
@@ -66,7 +68,7 @@ const Channel = ({ isActive, channel }) => {
           className="w-100 rounded-0 text-start"
           variant={btnVariant}
         >
-          <span>#</span> {channel.name}
+          <span>#</span> {channelName}
         </Button>
       )}
     </Nav.Item>
