@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
@@ -42,11 +43,11 @@ const Add = () => {
       try {
         await socket.addNewChannel({ name: body });
         dispatch(modalsActions.close());
-
-        // сделать вывод всплывающих окон - тоастифай.
+        toast.success(t('toastify.successAddChannel'));
       } catch (err) {
-        // если ошибка тоже выводить в сплывающие
-        console.log(err);
+        console.error(err);
+        toast.error(t('toastify.reject'));
+        // выводить ошибку в сборошибок.
       }
     },
   });
@@ -103,7 +104,3 @@ const Add = () => {
 };
 
 export default Add;
-
-// todo
-//  - выводить всплывающие окна при создании, и при ошибке.
-//  - перевести весь текст на интернационализацию.
