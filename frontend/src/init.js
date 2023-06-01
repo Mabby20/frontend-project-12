@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import filter from 'leo-profanity';
 import AuthProvider from './contexts/AuthProvider';
 import App from './components/App';
 import store from './slices';
@@ -11,6 +12,8 @@ import resources from './locales/index.js';
 const init = async () => {
   const websocket = io();
   const i18n = i18next.createInstance();
+  const badWordsRu = filter.getDictionary('ru');
+  filter.add(badWordsRu);
 
   await i18n.use(initReactI18next).init({
     resources,
