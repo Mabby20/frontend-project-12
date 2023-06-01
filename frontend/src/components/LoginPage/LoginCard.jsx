@@ -14,15 +14,17 @@ import axios from 'axios';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import loginNewImg from '../../assets/loginNew.png';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 
 const LoginCard = () => {
-  const { t } = useTranslation();
   const inputName = useRef(null);
   const [authFailed, setAuthFailed] = useState(false);
+  const rollbar = useRollbar();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { logIn } = useAuth();
 
   useEffect(() => {
@@ -58,9 +60,11 @@ const LoginCard = () => {
         if (err.isAxiosError) {
           if (err.code === 'ERR_NETWORK') {
             toast.error(t('toastify.reject'));
+            rollbar.error('LoginCard', err);
           }
           if (err.response.status === 401) {
             setAuthFailed(true);
+            rollbar.error('LoginCard', err);
           }
         }
         throw err;
