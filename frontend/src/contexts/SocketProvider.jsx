@@ -42,39 +42,20 @@ const SocketProvider = ({ socket, children }) => {
       socket.disconnect();
     };
 
-    const sendMessage = (message) => {
-      socket.timeout(3000).emit('newMessage', message, (err, data) => {
-        console.log('err on newMessage', err, 'message on newMessage', data);
-      });
+    const sendMessage = async (message) => {
+      await socket.timeout(3000).emitWithAck('newMessage', message);
     };
-    const addNewChannel = (channel) => {
-      socket.timeout(3000).emit('newChannel', channel, (err, data) => {
-        console.log('err on newChannel', err, 'message on newChannel', data);
-      });
+    const addNewChannel = async (channel) => {
+      await socket.timeout(3000).emitWithAck('newChannel', channel);
     };
-    const removeChannel = (targetId) => {
-      socket
+
+    const removeChannel = async (targetId) => {
+      await socket.timeout(3000).emitWithAck('removeChannel', { id: targetId });
+    };
+    const renameChannel = async (updateChannelInfo) => {
+      await socket
         .timeout(3000)
-        .emit('removeChannel', { id: targetId }, (err, data) => {
-          console.log(
-            'err on removeChannel',
-            err,
-            'message on removeChannel',
-            data,
-          );
-        });
-    };
-    const renameChannel = (updateChannelInfo) => {
-      socket
-        .timeout(3000)
-        .emit('renameChannel', updateChannelInfo, (err, data) => {
-          console.log(
-            'err on renameChannel',
-            err,
-            'message on renameChannel',
-            data,
-          );
-        });
+        .emitWithAck('renameChannel', updateChannelInfo);
     };
 
     return {
