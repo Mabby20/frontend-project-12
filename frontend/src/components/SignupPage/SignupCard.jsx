@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 import signupImg from '../../assets/signup.png';
@@ -62,11 +63,14 @@ const SignupCard = () => {
         logIn(data);
         navigate(appPaths.chatPagePath);
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 409) {
-          setRegFailed(true);
-          // выводить ошибку в тоаст
-          console.error(err);
-          return;
+        formik.setSubmitting(false);
+        if (err.isAxiosError) {
+          if (err.code === 'ERR_NETWORK') {
+            toast.error(t('toastify.reject'));
+          }
+          if (err.response.status === 409) {
+            setRegFailed(true);
+          }
         }
         throw err;
       }
@@ -169,7 +173,7 @@ const SignupCard = () => {
                       }
                       required
                     />
-                    <Form.Label htmlFor="password">
+                    <Form.Label htmlFor="confirmPassword">
                       {t('formForSignup.labelConfirmPassword')}
                     </Form.Label>
                     <Form.Control.Feedback type="invalid">
