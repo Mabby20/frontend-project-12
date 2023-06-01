@@ -5,17 +5,19 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 
 const Add = () => {
-  const { t } = useTranslation();
   const inputRef = useRef(null);
+  const rollbar = useRollbar();
   const socket = useSocket();
   const dispatch = useDispatch();
   const allChannelNames = useSelector(channelsSelectors.selectAllChannelNames);
   const isOpened = useSelector((state) => state.modals.isOpened);
+  const { t } = useTranslation();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -44,9 +46,9 @@ const Add = () => {
         dispatch(modalsActions.close());
         toast.success(t('toastify.successAddChannel'));
       } catch (err) {
-        console.error(err);
         toast.error(t('toastify.reject'));
-        // выводить ошибку в сборошибок.
+        rollbar.error('AddChannel', err);
+        console.error(err);
       }
     },
   });
