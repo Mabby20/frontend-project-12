@@ -5,6 +5,8 @@ export default {
     send: 'Отправить',
     logOut: 'Выйти',
     reject: 'Отменить',
+    update: 'Обновить',
+    errorHeader: 'Error message',
     registration: 'Зарегестрироваться',
     textRegistration: 'Регистрация',
     channels: 'Каналы',
@@ -49,7 +51,12 @@ export default {
       header: 'Переименовать',
       labelChatName: 'Имя канала',
     },
-    toast: {},
+    toastify: {
+      successAddChannel: 'Канал создан',
+      successRemoveChannel: 'Канал удалён',
+      successRenameChannel: 'Канал переименован',
+      reject: 'Ошибка соединения',
+    },
     validation: {
       required: 'Обязательное поле',
       lengthWarning: 'от 3х до 20 символов',
