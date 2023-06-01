@@ -13,6 +13,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import loginNewImg from '../../assets/loginNew.png';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
@@ -54,10 +55,13 @@ const LoginCard = () => {
         navigate(appPaths.chatPagePath);
       } catch (err) {
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 401) {
-          setAuthFailed(true);
-          // нужно ли выводить ошибку в тоаст тут?
-          return;
+        if (err.isAxiosError) {
+          if (err.code === 'ERR_NETWORK') {
+            toast.error(t('toastify.reject'));
+          }
+          if (err.response.status === 401) {
+            setAuthFailed(true);
+          }
         }
         throw err;
       }
@@ -157,7 +161,3 @@ const LoginCard = () => {
 };
 
 export default LoginCard;
-// TODO:
-//  -сделать роуты для футера, что бы не хардкодить путь как сейчас - готово
-//  -посмотреть как быть с onchange у инпутов
-//  -Добавить i18n в яп-шему, в фидбэк
