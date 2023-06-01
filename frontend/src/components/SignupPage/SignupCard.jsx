@@ -14,16 +14,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import useAuth from '../../hooks';
 import { ApiRoutes, appPaths } from '../../routes';
 import signupImg from '../../assets/signup.png';
 
 const SignupCard = () => {
   const inputUserName = useRef(null);
+  const [regFailed, setRegFailed] = useState(false);
+  const navigate = useNavigate();
+  const rollbar = useRollbar();
   const { t } = useTranslation();
   const { logIn } = useAuth();
-  const navigate = useNavigate();
-  const [regFailed, setRegFailed] = useState(false);
 
   useEffect(() => {
     inputUserName.current.focus();
@@ -67,9 +69,11 @@ const SignupCard = () => {
         if (err.isAxiosError) {
           if (err.code === 'ERR_NETWORK') {
             toast.error(t('toastify.reject'));
+            rollbar.error('SignupCard', err);
           }
           if (err.response.status === 409) {
             setRegFailed(true);
+            rollbar.error('SignupCard', err);
           }
         }
         throw err;
