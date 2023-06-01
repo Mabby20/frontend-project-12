@@ -5,17 +5,19 @@ import { useFormik } from 'formik';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 
 const Rename = () => {
   const input = useRef(null);
-  const { t } = useTranslation();
+  const rollbar = useRollbar();
   const socket = useSocket();
   const dispatch = useDispatch();
   const allChannelNames = useSelector(channelsSelectors.selectAllChannelNames);
   const { isOpened, targetId } = useSelector((state) => state.modals);
+  const { t } = useTranslation();
   const channelById = useSelector((state) =>
     channelsSelectors.selectChannelById(state, targetId),
   );
@@ -52,7 +54,7 @@ const Rename = () => {
         toast.success(t('toastify.successRenameChannel'));
       } catch (err) {
         toast.error(t('toastify.reject'));
-        // если ошибка тоже выводить в сплывающие
+        rollbar.error('renameChannel', err);
         console.error(err);
       }
     },
