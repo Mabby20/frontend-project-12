@@ -14,7 +14,6 @@ import CommonError from '../../assets/commonError.png';
 import Loading from '../../assets/loading.png';
 
 const statusList = {
-  notLoaded: 'notLoaded',
   loaded: 'loaded',
   loading: 'loading',
   errorLoad: 'errorLoad',
@@ -91,8 +90,3 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
-
-//TODO:
-// -написать код который должен делать запросы
-// -если запрос не удачный что с этим делать?
-// -воводить страницу с ошибкой, либо редиректить на другую?
