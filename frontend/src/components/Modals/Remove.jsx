@@ -1,6 +1,8 @@
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 import { actions as modalsActions } from '../../slices/modalSlice';
 import { useSocket } from '../../hooks';
 
@@ -8,6 +10,7 @@ const Remove = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const socket = useSocket();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isOpened, targetId } = useSelector((state) => state.modals);
 
@@ -17,13 +20,16 @@ const Remove = () => {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await socket.removeChannel(targetId);
-      console.log('response', response);
+      setIsSubmitting(true);
+      await socket.removeChannel(targetId);
       dispatch(modalsActions.close());
-      // выводим в тоаст
+      toast.success(t('toastify.successRemoveChannel'));
+      setIsSubmitting(false);
     } catch (err) {
+      setIsSubmitting(false);
+      toast.error(t('toastify.reject'));
       // выводим ошибку в тоаст и запихиыаем в статистику
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -38,7 +44,11 @@ const Remove = () => {
           <Button variant="secondary" onClick={handleClose}>
             {t('reject')}
           </Button>
-          <Button variant="danger" onClick={handleDeleteClick}>
+          <Button
+            variant="danger"
+            onClick={handleDeleteClick}
+            disabled={isSubmitting}
+          >
             {t('remove')}
           </Button>
         </Modal.Footer>
