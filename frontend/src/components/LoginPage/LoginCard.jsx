@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
 import loginNewImg from '../../assets/loginNew.png';
 import useAuth from '../../hooks';
-import { ApiRoutes, appPaths } from '../../routes';
+import { apiRoutes, appPaths } from '../../routes';
 
 const LoginCard = () => {
   const inputName = useRef(null);
@@ -52,7 +52,7 @@ const LoginCard = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        const { data } = await axios.post(ApiRoutes.loginPath(), values);
+        const { data } = await axios.post(apiRoutes.loginPath(), values);
         logIn(data);
         navigate(appPaths.chatPagePath);
       } catch (err) {

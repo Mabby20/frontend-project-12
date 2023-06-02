@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
 import useAuth from '../../hooks';
-import { ApiRoutes, appPaths } from '../../routes';
+import { apiRoutes, appPaths } from '../../routes';
 import signupImg from '../../assets/signup.png';
 
 const SignupCard = () => {
@@ -58,7 +58,7 @@ const SignupCard = () => {
     onSubmit: async ({ username, password }) => {
       setRegFailed(false);
       try {
-        const { data } = await axios.post(ApiRoutes.signupPath(), {
+        const { data } = await axios.post(apiRoutes.signupPath(), {
           username,
           password,
         });

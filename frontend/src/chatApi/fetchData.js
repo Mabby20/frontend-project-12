@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiRoutes } from '../routes';
+import { apiRoutes } from '../routes';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('user'));
@@ -11,6 +11,6 @@ const getAuthHeader = () => {
 
 export default async () => {
   const authHeader = { headers: getAuthHeader() };
-  const { data } = await axios.get(ApiRoutes.dataPath(), authHeader);
+  const { data } = await axios.get(apiRoutes.dataPath(), authHeader);
   return data;
 };
