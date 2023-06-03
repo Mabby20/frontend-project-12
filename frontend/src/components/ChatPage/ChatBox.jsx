@@ -1,16 +1,17 @@
 import { Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import filter from 'leo-profanity';
 import FormMessage from './FormMessage';
 import Message from './Message';
 import { selectors as messagesSelectors } from '../../slices/messageSlice';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
+import { useFilter } from '../../hooks';
 
 const ChatBox = () => {
   const { t } = useTranslation();
   const currentChannel = useSelector(channelsSelectors.selectCurrentChannel);
-  const channelName = filter.clean(currentChannel.name);
+  const filterBadWord = useFilter();
+  const channelName = filterBadWord(currentChannel.name);
   const messagesForCurrentChannel = useSelector(
     messagesSelectors.selectMessagesById,
   );
