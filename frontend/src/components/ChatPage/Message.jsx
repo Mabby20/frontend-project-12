@@ -1,12 +1,12 @@
-import filter from 'leo-profanity';
+import { useFilter } from '../../hooks';
 
 const Message = ({ message }) => {
-  const messageText = filter.clean(message.body);
+  const filterBadWord = useFilter();
   return (
     <div className="text-break mb-2">
       <b>{message.user}</b>
       {': '}
-      {messageText}
+      {filterBadWord(message.body)}
     </div>
   );
 };
