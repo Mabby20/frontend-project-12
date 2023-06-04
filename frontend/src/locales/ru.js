@@ -25,9 +25,9 @@ export default {
     },
     formForLogin: {
       placeholderUsername: 'Ваш ник',
-      placeholderPassword: 'Ваш пароль',
+      placeholderPassword: 'Пароль',
       labelUsername: 'Ваш ник',
-      labelPassword: 'Ваш пароль',
+      labelPassword: 'Пароль',
       invalidUserData: 'Неверные имя пользователя или пароль',
     },
     formForSignup: {
