@@ -50,6 +50,7 @@ export default {
     modalRenameChannel: {
       header: 'Переименовать',
       labelChatName: 'Имя канала',
+      menu: 'Управление каналом',
     },
     toastify: {
       successAddChannel: 'Канал создан',
