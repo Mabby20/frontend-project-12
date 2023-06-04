@@ -5,23 +5,20 @@ import * as yup from 'yup';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import useAuth, { useSocket } from '../../hooks';
 import { selectors as channelsSelectors } from '../../slices/channelsSlice';
 
 const FormMessage = () => {
-  const { t } = useTranslation();
   const inputMessage = useRef(null);
+  const rollbar = useRollbar();
+  const auth = useAuth();
+  const socket = useSocket();
   const currentChannelId = useSelector(
     channelsSelectors.selectCurrentChannelId,
   );
-  const socket = useSocket();
-  const auth = useAuth();
-
-  useEffect(() => {
-    if (inputMessage.current) {
-      inputMessage.current.focus();
-    }
-  });
+  const { t } = useTranslation();
 
   const validationSchema = yup.object().shape({
     messageText: yup.string().trim().required(t('validation.required')),
@@ -48,6 +45,18 @@ const FormMessage = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (inputMessage.current) {
+      inputMessage.current.focus();
+    }
+  }, [currentChannelId]);
+
+  useEffect(() => {
+    if (formik.values.messageText === '') {
+      inputMessage.current.focus();
+    }
+  }, [formik.values.messageText]);
 
   const isInvalid = !formik.dirty || !formik.isValid;
   return (
@@ -80,6 +89,3 @@ const FormMessage = () => {
 };
 
 export default FormMessage;
-
-// todo:
-//  - валидация
