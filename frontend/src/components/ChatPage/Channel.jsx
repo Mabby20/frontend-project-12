@@ -52,7 +52,11 @@ const Channel = ({ isActive, channel }) => {
             variant={btnVariant}
             className="flex-grow-0"
             id="dropdown-split-basic"
-          />
+          >
+            <span className="visually-hidden">
+              {t('modalRenameChannel.menu')}
+            </span>
+          </Dropdown.Toggle>
 
           <Dropdown.Menu>
             <Dropdown.Item onClick={handleDeleteModalClick}>
