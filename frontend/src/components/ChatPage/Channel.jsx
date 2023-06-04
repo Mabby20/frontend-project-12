@@ -1,11 +1,16 @@
-import { Button, ButtonGroup, Dropdown, Nav } from 'react-bootstrap';
+import {
+  Button, ButtonGroup, Dropdown, Nav,
+} from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFilter } from '../../hooks';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as modalsActions } from '../../slices/modalSlice';
 
-const Channel = ({ isActive, channel }) => {
+const Channel = ({
+  isActive,
+  channel,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isRemovable = channel.removable;
@@ -44,7 +49,9 @@ const Channel = ({ isActive, channel }) => {
             className="w-100 rounded-0 text-start"
             variant={btnVariant}
           >
-            <span>#</span> {channelName}
+            <span>#</span>
+            {' '}
+            {channelName}
           </Button>
 
           <Dropdown.Toggle
@@ -73,7 +80,9 @@ const Channel = ({ isActive, channel }) => {
           className="w-100 rounded-0 text-start"
           variant={btnVariant}
         >
-          <span>#</span> {channelName}
+          <span>#</span>
+          {' '}
+          {channelName}
         </Button>
       )}
     </Nav.Item>
