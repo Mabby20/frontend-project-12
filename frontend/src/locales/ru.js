@@ -59,7 +59,7 @@ export default {
     },
     validation: {
       required: 'Обязательное поле',
-      lengthWarning: 'От 3х до 20 символов',
+      lengthWarning: 'От 3 до 20 символов',
       uniqueName: 'Должно быть уникальным',
       confirmPass: 'Пароли должны совпадать',
       passwordWarning: 'Не менее 6 символов',
