@@ -17,11 +17,11 @@ const App = () => (
       <Routes>
         <Route
           path="/"
-          element={
+          element={(
             <ProtectedRoute>
               <ChatPage />
             </ProtectedRoute>
-          }
+          )}
         />
         <Route path="login" element={<LoginCard />} />
         <Route path="signup" element={<SignupCard />} />
