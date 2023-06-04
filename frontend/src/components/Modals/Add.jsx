@@ -20,7 +20,9 @@ const Add = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
   const validationSchema = yup.object().shape({

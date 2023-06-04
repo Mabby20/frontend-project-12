@@ -28,11 +28,13 @@ const LoginCard = () => {
   const { logIn } = useAuth();
 
   useEffect(() => {
-    inputName.current.focus();
+    if (inputName.current) {
+      inputName.current.focus();
+    }
   }, []);
 
   useEffect(() => {
-    if (authFailed) {
+    if (inputName.current && authFailed) {
       inputName.current.select();
     }
   }, [authFailed]);

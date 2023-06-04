@@ -24,7 +24,9 @@ const Rename = () => {
   const channelNameById = channelById.name;
 
   useEffect(() => {
-    input.current.select();
+    if (input.current) {
+      input.current.select();
+    }
   }, []);
 
   const validationSchema = yup.object().shape({

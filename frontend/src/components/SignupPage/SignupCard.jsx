@@ -28,8 +28,16 @@ const SignupCard = () => {
   const { logIn } = useAuth();
 
   useEffect(() => {
-    inputUserName.current.focus();
+    if (inputUserName.current) {
+      inputUserName.current.focus();
+    }
   }, []);
+
+  useEffect(() => {
+    if (inputUserName.current && regFailed) {
+      inputUserName.current.select();
+    }
+  }, [regFailed]);
 
   const validationSchema = yup.object().shape({
     username: yup
