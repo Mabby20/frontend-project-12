@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import fetchDataThunk from './thunks';
 
@@ -34,6 +35,7 @@ const channelsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // eslint-disable-next-line functional/no-expression-statements
     builder
       .addCase(fetchDataThunk.fulfilled, (state, action) => {
         channelsAdapter.setAll(state, action.payload.channels);
