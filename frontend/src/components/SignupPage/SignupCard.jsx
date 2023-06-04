@@ -62,6 +62,7 @@ const SignupCard = () => {
       confirmPassword: '',
     },
     validationSchema,
+    validateOnChange: false,
     onSubmit: async ({ username, password }) => {
       setRegFailed(false);
       try {
