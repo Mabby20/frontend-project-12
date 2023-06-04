@@ -12,7 +12,7 @@ const FormMessage = () => {
   const { t } = useTranslation();
   const inputMessage = useRef(null);
   const currentChannelId = useSelector(
-    channelsSelectors.SelectCurrentChannelId,
+    channelsSelectors.selectCurrentChannelId,
   );
   const socket = useSocket();
   const auth = useAuth();
@@ -32,15 +32,20 @@ const FormMessage = () => {
       messageText: '',
     },
     validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      console.log('values', values);
+    onSubmit: async (values, { resetForm }) => {
       const message = {
         body: values.messageText,
         channelId: currentChannelId,
         user: auth.user.username,
       };
-      socket.sendMessage(message);
-      resetForm();
+      try {
+        await socket.sendMessage(message);
+        resetForm();
+      } catch (err) {
+        toast.error(t('toastify.reject'));
+        rollbar.error('AddChannel', err);
+        console.error(err);
+      }
     },
   });
 
