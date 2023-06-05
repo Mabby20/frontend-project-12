@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Image, Row, Spinner } from 'react-bootstrap';
+import {
+  Button, Container, Image, Row, Spinner,
+} from 'react-bootstrap';
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
@@ -40,7 +42,9 @@ const ChatError = () => {
   return (
     <div className="m-auto w-auto text-center">
       <Image width={200} height={200} alt="CommonError" src={CommonError} />
-      <h3>{t('errorHeader')}</h3> <p>{error.message}</p>
+      <h3>{t('errorHeader')}</h3>
+      {' '}
+      <p>{error.message}</p>
       <Button onClick={() => navigate(0)}>{t('update')}</Button>
     </div>
   );
