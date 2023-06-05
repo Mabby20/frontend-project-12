@@ -18,7 +18,8 @@ const NotFoundPage = () => {
       />
       <h1 className="h4 text-muted">{t('notFoundPage')}</h1>
       <p className="text-muted">
-        {t('canGo')}{' '}
+        {t('canGo')}
+        {' '}
         <Link to={appPaths.chatPagePath}>{t('backToMainPage')}</Link>
       </p>
     </div>
