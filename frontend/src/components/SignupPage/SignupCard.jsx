@@ -1,11 +1,5 @@
 import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  Image,
-  Row,
+  Button, Card, Col, Container, Form, Image, Row,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -39,21 +33,22 @@ const SignupCard = () => {
     }
   }, [regFailed]);
 
-  const validationSchema = yup.object().shape({
-    username: yup
-      .string()
-      .trim()
-      .required(t('validation.required'))
-      .min(3, t('validation.lengthWarning'))
-      .max(20, t('validation.lengthWarning')),
-    password: yup
-      .string()
-      .required(t('validation.required'))
-      .min(6, t('validation.passwordWarning')),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], t('validation.confirmPass')),
-  });
+  const validationSchema = yup.object()
+    .shape({
+      username: yup
+        .string()
+        .trim()
+        .required(t('validation.required'))
+        .min(3, t('validation.lengthWarning'))
+        .max(20, t('validation.lengthWarning')),
+      password: yup
+        .string()
+        .required(t('validation.required'))
+        .min(6, t('validation.passwordWarning')),
+      confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password'), null], t('validation.confirmPass')),
+    });
 
   const formik = useFormik({
     initialValues: {
@@ -63,7 +58,10 @@ const SignupCard = () => {
     },
     validationSchema,
     validateOnChange: false,
-    onSubmit: async ({ username, password }) => {
+    onSubmit: async ({
+      username,
+      password,
+    }) => {
       setRegFailed(false);
       try {
         const { data } = await axios.post(apiRoutes.signupPath(), {
@@ -91,8 +89,7 @@ const SignupCard = () => {
 
   const isInvalidUsername = formik.touched.username && formik.errors.username;
   const isInvalidPassword = formik.touched.password && formik.errors.password;
-  const isInvalidConfirmPassword =
-    formik.touched.confirmPassword && formik.errors.confirmPassword;
+  const isInvalidConfirmPassword = formik.touched.confirmPassword && formik.errors.confirmPassword;
 
   return (
     <Container className="h-100" fluid>
@@ -180,8 +177,8 @@ const SignupCard = () => {
                       value={formik.values.confirmPassword}
                       isInvalid={regFailed || isInvalidConfirmPassword}
                       isValid={
-                        formik.touched.confirmPassword &&
-                        !formik.errors.confirmPassword
+                        formik.touched.confirmPassword
+                        && !formik.errors.confirmPassword
                       }
                       required
                     />
@@ -189,8 +186,8 @@ const SignupCard = () => {
                       {t('formForSignup.labelConfirmPassword')}
                     </Form.Label>
                     <Form.Control.Feedback type="invalid">
-                      {formik.errors.confirmPassword ||
-                        t('formForSignup.existingUser')}
+                      {formik.errors.confirmPassword
+                        || t('formForSignup.existingUser')}
                     </Form.Control.Feedback>
                   </Form.Floating>
                   <Button
