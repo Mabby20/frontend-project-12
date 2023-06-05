@@ -16,11 +16,12 @@ const Rename = () => {
   const socket = useSocket();
   const dispatch = useDispatch();
   const allChannelNames = useSelector(channelsSelectors.selectAllChannelNames);
-  const { isOpened, targetId } = useSelector((state) => state.modals);
+  const {
+    isOpened,
+    targetId,
+  } = useSelector((state) => state.modals);
   const { t } = useTranslation();
-  const channelById = useSelector((state) =>
-    channelsSelectors.selectChannelById(state, targetId),
-  );
+  const channelById = useSelector((state) => channelsSelectors.selectChannelById(state, targetId));
   const channelNameById = channelById.name;
 
   useEffect(() => {
@@ -29,15 +30,16 @@ const Rename = () => {
     }
   }, []);
 
-  const validationSchema = yup.object().shape({
-    body: yup
-      .string()
-      .trim()
-      .required(t('validation.required'))
-      .min(3, t('validation.lengthWarning'))
-      .max(20, t('validation.lengthWarning'))
-      .notOneOf(allChannelNames, t('validation.uniqueName')),
-  });
+  const validationSchema = yup.object()
+    .shape({
+      body: yup
+        .string()
+        .trim()
+        .required(t('validation.required'))
+        .min(3, t('validation.lengthWarning'))
+        .max(20, t('validation.lengthWarning'))
+        .notOneOf(allChannelNames, t('validation.uniqueName')),
+    });
 
   const formik = useFormik({
     initialValues: {
