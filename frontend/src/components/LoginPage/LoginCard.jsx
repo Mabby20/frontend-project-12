@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  Image,
-  Row,
+  Button, Card, Col, Container, Form, Image, Row,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -39,10 +33,14 @@ const LoginCard = () => {
     }
   }, [authFailed]);
 
-  const validationSchema = yup.object().shape({
-    username: yup.string().trim().required(t('validation.required')),
-    password: yup.string().required(t('validation.required')),
-  });
+  const validationSchema = yup.object()
+    .shape({
+      username: yup.string()
+        .trim()
+        .required(t('validation.required')),
+      password: yup.string()
+        .required(t('validation.required')),
+    });
 
   const formik = useFormik({
     initialValues: {
@@ -137,8 +135,8 @@ const LoginCard = () => {
                       {t('formForLogin.labelPassword')}
                     </Form.Label>
                     <Form.Control.Feedback type="invalid">
-                      {formik.errors.password ||
-                        t('formForLogin.invalidUserData')}
+                      {formik.errors.password
+                        || t('formForLogin.invalidUserData')}
                     </Form.Control.Feedback>
                   </Form.Floating>
                   <Button
@@ -153,7 +151,8 @@ const LoginCard = () => {
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>{t('hasAccount')}</span>{' '}
+                <span>{t('hasAccount')}</span>
+                {' '}
                 <Link to={appPaths.signUpPagePath}>
                   {t('textRegistration')}
                 </Link>
