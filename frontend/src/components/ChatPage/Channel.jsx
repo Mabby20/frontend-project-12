@@ -46,7 +46,7 @@ const Channel = ({
         <Dropdown as={ButtonGroup} className="d-flex">
           <Button
             onClick={handleChatSelect}
-            className="w-100 rounded-0 text-start"
+            className="w-100 rounded-0 text-start text-truncate"
             variant={btnVariant}
           >
             <span>#</span>
