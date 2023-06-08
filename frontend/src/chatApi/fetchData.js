@@ -1,16 +1,8 @@
 import axios from 'axios';
 import { apiRoutes } from '../routes';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('user'));
-
-  return userId && userId.token
-    ? { Authorization: `Bearer ${userId.token}` }
-    : {};
-};
-
-export default async () => {
-  const authHeader = { headers: getAuthHeader() };
+export default async (header) => {
+  const authHeader = { headers: header };
   const { data } = await axios.get(apiRoutes.dataPath(), authHeader);
   return data;
 };
