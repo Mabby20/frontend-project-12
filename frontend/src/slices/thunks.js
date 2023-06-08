@@ -3,11 +3,11 @@ import fetchAllData from '../chatApi/fetchData';
 
 const fetchDataThunk = createAsyncThunk(
   'fetchInitialData',
-  async (_, { rejectWithValue }) => {
+  async (header, { rejectWithValue }) => {
     try {
-      return await fetchAllData();
+      return await fetchAllData(header);
     } catch (err) {
-      return rejectWithValue({ message: err.message });
+      return rejectWithValue({ message: err.message, errCode: err.response.status });
     }
   },
 );
