@@ -6,6 +6,7 @@ export default {
     logOut: 'Выйти',
     reject: 'Отменить',
     update: 'Обновить',
+    authErrorBtn: 'Переавторизоваться',
     errorHeader: 'Error message',
     registration: 'Зарегестрироваться',
     textRegistration: 'Регистрация',
