@@ -18,7 +18,6 @@ const SocketProvider = ({ socket, children }) => {
     socket.on('newChannel', (channel) => {
       console.log('new channel', channel);
       dispatch(channelsActions.addChanel(channel));
-      dispatch(channelsActions.changeCurrentChannelId({ id: channel.id }));
     });
 
     socket.on('removeChannel', ({ id }) => {
@@ -50,9 +49,11 @@ const SocketProvider = ({ socket, children }) => {
 
   const addNewChannel = useCallback(
     async (channel) => {
-      await socket.timeout(3000).emitWithAck('newChannel', channel);
+      const { data } = await socket.timeout(3000).emitWithAck('newChannel', channel);
+      dispatch(channelsActions.changeCurrentChannelId({ id: data.id }));
+      dispatch(channelsActions.addChanel(data));
     },
-    [socket],
+    [socket, dispatch],
   );
 
   const removeChannel = useCallback(
