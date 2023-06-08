@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button, Container, Image, Row, Spinner,
 } from 'react-bootstrap';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -43,6 +43,13 @@ const ChatError = () => {
   const navigate = useNavigate();
   const { logOut } = useAuth();
   const { t } = useTranslation();
+  const authErrHandler = () => {
+    navigate(apiRoutes.loginPath);
+    logOut();
+  };
+  const otherErrHandler = () => {
+    navigate(0);
+  };
 
   return (
     <div className="m-auto w-auto text-center">
@@ -52,10 +59,9 @@ const ChatError = () => {
       <p>{message}</p>
       <Button onClick={() => {
         if (errCode === 401) {
-          navigate(apiRoutes.loginPath);
-          logOut();
+          authErrHandler();
         } else {
-          navigate(0);
+          otherErrHandler();
         }
       }}
       >
@@ -91,13 +97,13 @@ const ChatPage = () => {
   const socket = useSocket();
   const typeModal = useSelector(modalsSelectors.selectTypeModal);
   const { getAuthHeader } = useAuth();
-  const header = getAuthHeader();
+  const authHeaders = useMemo(() => ({ headers: getAuthHeader() }), [getAuthHeader]);
   useEffect(() => {
-    dispatch(fetchDataThunk(header));
+    dispatch(fetchDataThunk(authHeaders));
     socket.connectSocket();
 
     return () => socket.disconnectSocket();
-  }, [dispatch, socket, header]);
+  }, [dispatch, socket, authHeaders]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
