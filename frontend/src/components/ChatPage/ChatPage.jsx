@@ -9,11 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import fetchDataThunk from '../../slices/thunks';
 import ChannelBox from './ChannelBox';
 import ChatBox from './ChatBox';
-import { useSocket } from '../../hooks';
+import useAuth, { useSocket } from '../../hooks';
 import { selectors as modalsSelectors } from '../../slices/modalSlice';
 import getModalComponent from '../Modals';
 import CommonError from '../../assets/commonError.png';
 import Loading from '../../assets/loading.png';
+import { apiRoutes } from '../../routes';
 
 const statusList = {
   loaded: 'loaded',
@@ -35,8 +36,12 @@ const LoadingSpinner = () => {
 };
 
 const ChatError = () => {
-  const error = useSelector((state) => state.channelsInfo.error);
+  const {
+    errCode,
+    message,
+  } = useSelector((state) => state.channelsInfo.error);
   const navigate = useNavigate();
+  const { logOut } = useAuth();
   const { t } = useTranslation();
 
   return (
@@ -44,8 +49,18 @@ const ChatError = () => {
       <Image width={200} height={200} alt="CommonError" src={CommonError} />
       <h3>{t('errorHeader')}</h3>
       {' '}
-      <p>{error.message}</p>
-      <Button onClick={() => navigate(0)}>{t('update')}</Button>
+      <p>{message}</p>
+      <Button onClick={() => {
+        if (errCode === 401) {
+          navigate(apiRoutes.loginPath);
+          logOut();
+        } else {
+          navigate(0);
+        }
+      }}
+      >
+        {errCode === 401 ? t('authErrorBtn') : t('update')}
+      </Button>
     </div>
   );
 };
@@ -75,13 +90,14 @@ const ChatPage = () => {
   const dispatch = useDispatch();
   const socket = useSocket();
   const typeModal = useSelector(modalsSelectors.selectTypeModal);
-
+  const { getAuthHeader } = useAuth();
+  const header = getAuthHeader();
   useEffect(() => {
-    dispatch(fetchDataThunk());
+    dispatch(fetchDataThunk(header));
     socket.connectSocket();
 
     return () => socket.disconnectSocket();
-  }, [dispatch, socket]);
+  }, [dispatch, socket, header]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
